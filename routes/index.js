@@ -1,5 +1,15 @@
 var express = require('express');
 var router = express.Router();
+// 导入lowdb模块
+const low = require('lowdb');
+// 导入文件模块
+const FileSync = require('lowdb/adapters/FileSync');
+// 导入JSON文件
+const adapter = new FileSync(__dirname + '/../data/db.json');
+// 获取db对象
+const db = low(adapter);
+// 导入shortid模块
+const shortid = require('shortid');
 
 // 记账本的列表
 router.get('/account', function (req, res, next) {
@@ -12,7 +22,11 @@ router.get('/account/create', function (req, res, next) {
 
 router.post('/account', function (req, res, next) {
   // 获取请求体里面的数据
-  console.log(req.body);
+  // console.log(req.body);
+  // 生成id
+  let id = shortid.generate();
+  // 写入文件
+  db.get('accounts').unshift({ id: id, ...req.body }).write();
   res.send('添加记录');
 })
 
