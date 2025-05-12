@@ -27,7 +27,8 @@ router.post('/account', function (req, res, next) {
   let id = shortid.generate();
   // 写入文件
   db.get('accounts').unshift({ id: id, ...req.body }).write();
-  res.send('添加记录');
+  // 成功相应
+  res.render('success', { msg: '记账成功', url: '/account' });
 })
 
 module.exports = router;
