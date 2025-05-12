@@ -19,10 +19,12 @@ router.get('/account', function (req, res, next) {
   res.render('list', { accounts: accounts });
 });
 
+// 显示添加账单的页面
 router.get('/account/create', function (req, res, next) {
   res.render('create');
 });
 
+// 添加记录
 router.post('/account', function (req, res, next) {
   // 获取请求体里面的数据
   // console.log(req.body);
@@ -32,6 +34,16 @@ router.post('/account', function (req, res, next) {
   db.get('accounts').unshift({ id: id, ...req.body }).write();
   // 成功相应
   res.render('success', { msg: '记账成功', url: '/account' });
+});
+
+// 删除记录
+router.get('/account/:id', (req, res) => {
+  // 获取params里面的id
+  let id = req.params.id;
+  // 根据id删除数据
+  db.get('accounts').remove({ id: id }).write();
+  // 提醒删除成功
+  res.render('success', { msg: '删除成功', url: '/account' });
 })
 
 module.exports = router;
