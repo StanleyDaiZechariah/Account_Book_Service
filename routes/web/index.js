@@ -5,7 +5,7 @@ var router = express.Router();
 // 导入moment模块
 const moment = require('moment');
 // 导入模型对象
-const AccountModel = require('../model/AccountModel');
+const AccountModel = require('../../model/AccountModel');
 
 // 记账本的列表
 router.get('/account', function (req, res, next) {
