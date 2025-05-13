@@ -8,8 +8,11 @@ const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync(__dirname + '/../data/db.json');
 // 获取db对象
 const db = low(adapter);
-// 导入shortid模块
-const shortid = require('shortid');
+
+// 导入moment模块
+const moment = require('moment');
+// 导入模型对象
+const AccountModel = require('../model/AccountModel');
 
 // 记账本的列表
 router.get('/account', function (req, res, next) {
@@ -28,12 +31,20 @@ router.get('/account/create', function (req, res, next) {
 router.post('/account', function (req, res, next) {
   // 获取请求体里面的数据
   // console.log(req.body);
-  // 生成id
-  let id = shortid.generate();
-  // 写入文件
-  db.get('accounts').unshift({ id: id, ...req.body }).write();
-  // 成功相应
-  res.render('success', { msg: '记账成功', url: '/account' });
+  // 插入数据库
+  AccountModel.create({
+    ...req.body,
+    // 修改 time 属性的值 覆盖前面那个对象的 time 属性的值
+    time: moment(req.body.time).toDate(),
+  }).then(() => {
+    // 成功相应
+    res.render('success', { msg: '记账成功', url: '/account' });
+  }).catch(() => {
+    // 失败响应
+    res.status(500).send('插入失败！！')
+    return;
+  })
+
 });
 
 // 删除记录
