@@ -84,16 +84,26 @@ router.post('/account', function (req, res, next) {
 });
 
 // 删除记录
-router.get('/account/:id', (req, res) => {
+router.delete('/account/:id', (req, res) => {
     // 获取params里面的id
     let id = req.params.id;
     // 根据id删除数据
-    AccountModel.deleteOne({ _id: id }).then(() => {
+    AccountModel.deleteOne({ _id: id }).then((data) => {
         // 提醒删除成功
-        res.render('success', { msg: '删除成功', url: '/account' });
+        res.json({
+            code: '0000',
+            msg: '删除成功',
+            data: data
+        })
     }).catch(() => {
         // 失败响应
-        res.status(500).send('读取失败!!');
+        res.json({
+            // 响应编号
+            code: '1004',
+            // 响应信息
+            msg: '删除失败!!',
+            data: null
+        })
         return;
     })
 });
