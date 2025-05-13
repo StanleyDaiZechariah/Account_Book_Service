@@ -17,9 +17,15 @@ const AccountModel = require('../model/AccountModel');
 // 记账本的列表
 router.get('/account', function (req, res, next) {
   // 获取所有账单的信息
-  let accounts = db.get('accounts').value();
-  // console.log(accounts);
-  res.render('list', { accounts: accounts });
+  AccountModel.find().sort({ time: -1 }).exec().then((data) => {
+    // 成功响应
+    res.render('list', { accounts: data, moment: moment });
+  }).catch((err) => {
+    // 失败响应
+    res.status(500).send('读取失败!!');
+    return;
+  })
+
 });
 
 // 显示添加账单的页面
