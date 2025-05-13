@@ -43,17 +43,41 @@ router.get('/account/create', function (req, res, next) {
 router.post('/account', function (req, res, next) {
     // 获取请求体里面的数据
     // console.log(req.body);
+    // 验证数据
+    if (req.body.title.trim() === '') {
+        res.json({
+            // 响应编号
+            code: '1003',
+            // 响应信息
+            msg: '标题不能为空！！',
+            data: null
+        });
+        return;
+    }
     // 插入数据库
     AccountModel.create({
         ...req.body,
         // 修改 time 属性的值 覆盖前面那个对象的 time 属性的值
         time: moment(req.body.time).toDate(),
-    }).then(() => {
+    }).then((data) => {
         // 成功相应
-        res.render('success', { msg: '记账成功', url: '/account' });
+        res.json({
+            // 响应编号
+            code: '0000',
+            // 响应信息
+            msg: '记账成功',
+            // 响应数据
+            data: data
+        })
     }).catch(() => {
         // 失败响应
-        res.status(500).send('插入失败！！')
+        res.json({
+            // 响应编号
+            code: '1002',
+            // 响应信息
+            msg: '插入失败!!',
+            data: null
+        });
         return;
     })
 
