@@ -58,9 +58,14 @@ router.get('/account/:id', (req, res) => {
   // 获取params里面的id
   let id = req.params.id;
   // 根据id删除数据
-  db.get('accounts').remove({ id: id }).write();
-  // 提醒删除成功
-  res.render('success', { msg: '删除成功', url: '/account' });
-})
+  AccountModel.deleteOne({ _id: id }).then(() => {
+    // 提醒删除成功
+    res.render('success', { msg: '删除成功', url: '/account' });
+  }).catch(() => {
+    // 失败响应
+    res.status(500).send('读取失败!!');
+    return;
+  })
+});
 
 module.exports = router;
