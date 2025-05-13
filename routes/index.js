@@ -1,13 +1,6 @@
 var express = require('express');
 var router = express.Router();
-// 导入lowdb模块
-const low = require('lowdb');
-// 导入文件模块
-const FileSync = require('lowdb/adapters/FileSync');
-// 导入JSON文件
-const adapter = new FileSync(__dirname + '/../data/db.json');
-// 获取db对象
-const db = low(adapter);
+
 
 // 导入moment模块
 const moment = require('moment');
