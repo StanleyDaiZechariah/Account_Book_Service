@@ -108,4 +108,65 @@ router.delete('/account/:id', (req, res) => {
     })
 });
 
+// 获取单个账单信息
+router.get('/account/:id', (req, res) => {
+    // 获取params里面的id
+    let id = req.params.id;
+    // 根据id查询数据
+    AccountModel.findById(id).then((data) => {
+        // 成功响应
+        res.json({
+            code: '0000',
+            msg: '查询单个账单成功',
+            data: data
+        })
+    }).catch(() => {
+        // 失败响应
+        res.json({
+            // 响应编号
+            code: '1005',
+            // 响应信息
+            msg: '查询单个账单失败!!',
+            data: null
+        })
+        return;
+    });
+});
+
+// 修改记录
+router.patch('/account/:id', (req, res) => {
+    // 获取params里面的id
+    let id = req.params.id;
+    // 根据id查询数据
+    AccountModel.updateOne({ _id: id }, req.body).then((data) => {
+        // 再次查询数据库
+        AccountModel.findById(id).then((data) => {
+            // 成功响应
+            res.json({
+                code: '0000',
+                msg: '读取修改后的数据成功',
+                data: data
+            });
+        }).catch(() => {
+            // 失败响应
+            res.json({
+                // 响应编号
+                code: '1007',
+                // 响应信息
+                msg: '读取修改后的数据失败!!',
+                data: null
+            })
+        })
+    }).catch(() => {
+        // 失败响应
+        res.json({
+            // 响应编号
+            code: '1006',
+            // 响应信息
+            msg: '修改失败!!',
+            data: null
+        })
+    });
+});
+
 module.exports = router;
