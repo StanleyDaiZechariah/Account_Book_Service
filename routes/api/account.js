@@ -12,10 +12,23 @@ router.get('/account', function (req, res, next) {
     // 获取所有账单的信息
     AccountModel.find().sort({ time: -1 }).exec().then((data) => {
         // 成功响应
-        res.render('list', { accounts: data, moment: moment });
-    }).catch((err) => {
+        res.json({
+            // 响应编号
+            code: '0000',
+            // 响应信息
+            msg: '读取成功！！',
+            // 响应数据
+            data: data
+        });
+    }).catch(() => {
         // 失败响应
-        res.status(500).send('读取失败!!');
+        res.json({
+            // 响应编号
+            code: '1001',
+            // 响应信息
+            msg: '读取失败!!',
+            data: null
+        });
         return;
     })
 
