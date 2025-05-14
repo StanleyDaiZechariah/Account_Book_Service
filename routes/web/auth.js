@@ -44,6 +44,11 @@ router.post('/login', (req, res) => {
             res.render('fail', { msg: '用户名或密码错误！！', url: '/login' });
             return;
         }
+
+        // 写入session
+        req.session.username = data.username;
+        req.session._id = data._id;
+
         // 登陆成功
         res.render('success', { msg: '登录成功！！', url: '/account' });
     }).catch((err) => {
