@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 
 // 导入moment模块
@@ -9,6 +9,10 @@ const AccountModel = require('../../model/AccountModel');
 // 导入局部中间件
 const checkLoginMiddleWare = require('../../middleWare/checkLoginMiddleWare');
 
+// 添加首页路由检测登录
+router.get('/', function (req, res, next) {
+  res.redirect('/account');
+})
 
 // 记账本的列表
 router.get('/account', checkLoginMiddleWare, function (req, res, next) {
