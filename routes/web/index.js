@@ -6,9 +6,13 @@ var router = express.Router();
 const moment = require('moment');
 // 导入模型对象
 const AccountModel = require('../../model/AccountModel');
+// 导入局部中间件
+const checkLoginMiddleWare = require('../../middleWare/checkLoginMiddleWare');
+
 
 // 记账本的列表
-router.get('/account', function (req, res, next) {
+router.get('/account', checkLoginMiddleWare, function (req, res, next) {
+
   // 获取所有账单的信息
   AccountModel.find().sort({ time: -1 }).exec().then((data) => {
     // 成功响应
@@ -22,12 +26,12 @@ router.get('/account', function (req, res, next) {
 });
 
 // 显示添加账单的页面
-router.get('/account/create', function (req, res, next) {
+router.get('/account/create', checkLoginMiddleWare, function (req, res, next) {
   res.render('create');
 });
 
 // 添加记录
-router.post('/account', function (req, res, next) {
+router.post('/account', checkLoginMiddleWare, function (req, res, next) {
   // 获取请求体里面的数据
   // console.log(req.body);
   // 插入数据库
@@ -47,7 +51,7 @@ router.post('/account', function (req, res, next) {
 });
 
 // 删除记录
-router.get('/account/:id', (req, res) => {
+router.get('/account/:id', checkLoginMiddleWare, (req, res) => {
   // 获取params里面的id
   let id = req.params.id;
   // 根据id删除数据
